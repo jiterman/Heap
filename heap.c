@@ -127,8 +127,10 @@ void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp){
     //hago heapify
     if (cant == 1 || cant == 0) return;
     heap_t* heap = heap_crear_arr(elementos, cant, cmp);
-    swap(heap->datos[0], heap->datos[cant]);
-    cant--;
-    downheap(elementos, cant, 0, cmp);
-    heap_sort(elementos, cant, cmp);
+    size_t i = cant-1;
+    while(i != 0){
+        swap(heap->datos[0], heap->datos[i]);
+        i--;
+        downheap(heap->datos, i, 0, cmp);
+    }
 }
