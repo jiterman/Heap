@@ -71,8 +71,8 @@ heap_t *heap_crear_arr(void *arreglo[], size_t n, cmp_func_t cmp){
     heap_t* heap = heap_crear(cmp);
     if (!heap) return NULL;
 
-    for (i = 0; i < n, i++) {
-        if (!heap_encolar(arreglo[i])) {
+    for (int i = 0; i < n; i++) {
+        if (!heap_encolar(heap, arreglo[i])) {
             heap_destruir(heap, NULL);
             return NULL;
         }
@@ -92,7 +92,14 @@ bool heap_esta_vacio(const heap_t *heap){
     return heap->cant == 0;
 }
 
-bool heap_encolar(heap_t *heap, void *elem);
+bool heap_encolar(heap_t *heap, void *elem){
+    if (!heap) return false;
+    if (heap->cant == heap->tam && !heap_redimensionar(heap, heap->tam++)) return false;
+    heap->cant++;
+    heap->datos[heap->cant] = elem;
+    upheap(heap->datos,heap->cant,heap->cmp); 
+    return true;
+}
 
 void *heap_ver_max(const heap_t *heap){
     if (heap_esta_vacio(heap)) return NULL;
@@ -106,16 +113,20 @@ void *heap_desencolar(heap_t *heap){
     swap(heap->datos[0], heap->datos[heap->cant - 1]);
     heap->cant -= 1;
 
-    downheap(heap->datos, heap->cant, 0);
+    downheap(heap->datos, heap->cant, 0, heap->cmp);
 
     heap->cant -= 1;
-    if (heap->cant <= (heap->tam/CRIT_ACHICAR) && pila->tam > TAM_INICIAL) heap_redimensionar(heap, heap->tam/FACTOR_REDUC_HEAP);
+    if (heap->cant <= (heap->tam/CRIT_ACHICAR) && heap->tam > TAM_INICIAL) heap_redimensionar(heap, heap->tam/FACTOR_REDUC_HEAP);
 
     return valor;
 }
 
 void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp){
     //hago heapify
+    if (cant == 1 || cant == 0) return;
     heap_t* heap = heap_crear_arr(elementos, cant, cmp);
-
+    swap(elementos[0], elementos[cant]);
+    cant--;
+    downheap(elementos, cant, elementos[0], cmp);
+    heap_sort(elementos, cant, cmp);
 }
