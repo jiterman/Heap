@@ -117,7 +117,6 @@ void *heap_desencolar(heap_t *heap){
     heap->cant -= 1;
 
     downheap(heap->datos, heap->cant, 0, heap->cmp);
-    // printf("%d\n", *(int*)valor);
     if (heap->cant <= (heap->tam/CRIT_ACHICAR) && heap->tam > TAM_INICIAL) heap_redimensionar(heap, heap->tam/FACTOR_REDUC_HEAP);
 
     return valor;

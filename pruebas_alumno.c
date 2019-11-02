@@ -226,7 +226,6 @@ void pruebas_heap_sort(){
     /* Reviso que haya ordenado como esperado*/
 
     for (int i = 0; i<6; i++){
-        printf("%d %d\n", *(int*)arreglo[i], arreglo_ordenado[i]);
         if (*(int*)arreglo[i] != arreglo_ordenado[i]) todo_ok = false;
     }
     print_test("El arreglo fue ordenado como se esperaba", todo_ok);
