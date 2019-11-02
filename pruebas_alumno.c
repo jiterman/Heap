@@ -11,7 +11,7 @@
  * *****************************************************************/
 
 void pruebas_heap_vacio() {
-    printf("\nINICIO DE PRUEBAS CON HEAP VACÍA\n");
+    printf("\nINICIO DE PRUEBAS CON HEAP VACÍO\n");
 
     /* Declaro las variables a utilizar*/
     heap_t* heap = heap_crear(strcmp);
@@ -23,8 +23,7 @@ void pruebas_heap_vacio() {
 
     /* Destruyo el heap*/
     heap_destruir(heap, NULL);
-    print_test("El heap fue destruido", true);
-    printf("\n");
+    print_test("El heap fue destruido\n", true);
 }
 
 void pruebas_encolar_null(){
@@ -46,8 +45,7 @@ void pruebas_encolar_null(){
 
     /* Destruyo el heap*/
     heap_destruir(heap, NULL);
-    print_test("El heap fue destruido", true);
-    printf("\n");
+    print_test("El heap fue destruido\n", true);
 }
 
 void pruebas_algunos_elementos(){
@@ -87,8 +85,7 @@ void pruebas_algunos_elementos(){
     /* Destruyo el heap*/
 
     heap_destruir(heap, NULL);
-    print_test("El heap fue destruido", true);
-    printf("\n");
+    print_test("El heap fue destruido\n", true);
 }
 
 void pruebas_de_volumen(){
@@ -132,7 +129,7 @@ void pruebas_de_volumen(){
     print_test("En cada caso se cumple la invariante y el primero es el correspondiente", ok);
 
     heap_destruir(heap, NULL);
-    print_test("El heap fue destruido", true);
+    print_test("El heap fue destruido\n", true);
 }
 
 void pruebas_destruir_heap(){
