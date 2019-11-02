@@ -23,9 +23,10 @@ void swap (void **x, void **y) {
 void upheap(void** arreglo, size_t pos, cmp_func_t cmp){
 	if (pos == 0) return;
 	size_t padre = (pos-1) / 2;
-	if (cmp(arreglo[padre], arreglo[pos]) < 0) 
+	if (cmp(arreglo[padre], arreglo[pos]) < 0){
 		swap(arreglo[pos], arreglo[pos]);
 		upheap(arreglo, padre, cmp);
+    }
 }
 
 void downheap(void** arreglo, size_t tam, size_t pos, cmp_func_t cmp){
@@ -35,9 +36,10 @@ void downheap(void** arreglo, size_t tam, size_t pos, cmp_func_t cmp){
 	size_t der = (2 * pos) + 2;
 	if (izq < tam && cmp(arreglo[izq], arreglo[min]) > 0) min = izq;
 	if (der < tam && cmp(arreglo[der], arreglo[min]) > 0) min = der;
-	if (min != pos)
+	if (min != pos){
 		swap(arreglo[pos], arreglo[min]);
 		downheap(arreglo, tam, min, cmp);
+    }
 }
 
 heap_t *heap_crear(cmp_func_t cmp){
@@ -107,7 +109,7 @@ void *heap_ver_max(const heap_t *heap){
 }
 
 void *heap_desencolar(heap_t *heap){
-    if (heap__esta_vacio(heap)) return NULL;
+    if (heap_esta_vacio(heap)) return NULL;
     void* valor = heap->datos[0];
 
     swap(heap->datos[0], heap->datos[heap->cant - 1]);
@@ -127,6 +129,6 @@ void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp){
     heap_t* heap = heap_crear_arr(elementos, cant, cmp);
     swap(elementos[0], elementos[cant]);
     cant--;
-    downheap(elementos, cant, elementos[0], cmp);
+    downheap(elementos, cant, 0, cmp);
     heap_sort(elementos, cant, cmp);
 }

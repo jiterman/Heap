@@ -3,18 +3,23 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 
 /* ******************************************************************
  *                   PRUEBAS UNITARIAS ALUMNO
  * *****************************************************************/
 
+int comp_nros(const void* num1, const void* num2){
+    if (*(int*)num1 > *(int*)num2) return 1;
+    if (*(int*)num1 < *(int*)num2) return -1;
+    else return 0;    
+}
+
 void pruebas_heap_vacio() {
     printf("\nINICIO DE PRUEBAS CON HEAP VACÍO\n");
 
     /* Declaro las variables a utilizar*/
-    heap_t* heap = heap_crear(strcmp);
+    heap_t* heap = heap_crear(comp_nros);
 
     /* Inicio de pruebas */
     print_test("El heap está vacío", heap_esta_vacio(heap));
@@ -31,7 +36,7 @@ void pruebas_encolar_null(){
     printf("INICIO DE PRUEBAS ENCOLANDO NULL\n");
 
     /* Declaro las variables a utilizar*/
-    heap_t* heap = heap_crear(strcmp);
+    heap_t* heap = heap_crear(comp_nros);
 
     /* Inicio de pruebas encolando NULL */
     print_test("Se encola NULL", heap_encolar(heap, NULL));
@@ -52,7 +57,7 @@ void pruebas_algunos_elementos(){
     printf("INICIO DE PRUEBAS CON ALGUNOS ELEMENTOS\n");
 
     /* Declaro las variables a utilizar*/
-    heap_t* heap = heap_crear(strcmp);
+    heap_t* heap = heap_crear(comp_nros);
     int var1 = 5;
     int var2 = -10;
     bool var3 = false;
@@ -95,7 +100,7 @@ void pruebas_de_volumen(){
     int cant_elementos = 10000;
 
     /* Declaro las variables a utilizar*/
-    heap_t* heap = heap_crear(strcmp);
+    heap_t* heap = heap_crear(comp_nros);
     int vector[cant_elementos];
 
     /* Comienzo a encolar elementos 
@@ -136,13 +141,13 @@ void pruebas_destruir_heap(){
     printf("INICIO DE PRUEBAS DESTRUIR HEAP CON ELEMENTOS EN MEMORIA ESTÁTICA\n");
 
     /* Declaro las variables a utilizar*/
-    heap_t* heap = heap_crear(strcmp);
-    char* var1 = "a";
-    char* var2 = "b";
+    heap_t* heap = heap_crear(comp_nros);
+    int var1 = 5;
+    int var2 = 10;
 
     /* Inicio de pruebas encolando todos los elementos */
-    print_test("Se encola a", heap_encolar(heap, &var1));
-    print_test("Se encola b", heap_encolar(heap, &var2));
+    print_test("Se encola 5", heap_encolar(heap, &var1));
+    print_test("Se encola 10", heap_encolar(heap, &var2));
 
     /* Chequeo que el heap no se comporte como vacío */
     print_test("El heap no está vacío", !heap_esta_vacio(heap));
@@ -154,7 +159,7 @@ void pruebas_destruir_heap(){
     printf("INICIO DE PRUEBAS DESTRUIR HEAP CON ELEMENTOS QUE SE LIBERAN CON FREE\n");
 
     /* Declaro las variables a utilizar*/
-    heap = heap_crear(strcmp);
+    heap = heap_crear(comp_nros);
     char* a = malloc(sizeof(int));
     char* b = malloc(sizeof(int));
 
@@ -169,7 +174,7 @@ void pruebas_destruir_heap(){
     printf("INICIO DE PRUEBAS DESTRUIR HEAP CON ELEM EN MEMORIA DINÁMICA DESENCOLADOS\n");
     
     /* Declaro las variables a utilizar*/
-    heap = heap_crear(strcmp);
+    heap = heap_crear(comp_nros);
     int* c = malloc(sizeof(int));
 
     /* Inicio de pruebas encolando todos los elementos */
