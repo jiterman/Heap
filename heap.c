@@ -14,6 +14,32 @@ struct heap {
 	cmp_function_t cmp;
 };
 
+void swap (void **x, void **y) {
+    void* valor_aux = *x;
+    *x = *y;
+    *y = valor_aux;
+}
+
+void upheap(void** arreglo, size_t pos, cmp_func_t cmp){
+	if (pos == 0) return;
+	padre = (pos-1) / 2;
+	if (cmp(arreglo[padre], arreglo[pos]) < 0) 
+		swap(arreglo[pos], arreglo[pos]);
+		upheap(arreglo, padre, cmp);
+}
+
+void downheap(void** arreglo, size_t tam, size_t pos, cmp_func_t cmp)
+	if (pos >= tam) return;
+	min = pos; // PADRE
+	izq = (2 * pos) + 1;
+	der = (2 * pos) + 2;
+	if (izq < tam && cmp(arreglo[izq], arreglo[min]) > 0) min = izq;
+	if (der < tam && cmp(arreglo[der], arreglo[min]) > 0) min = der;
+	if (min != pos)
+		swap(arreglo[pos], arreglo[min]);
+		downheap(arreglo, tam, min, cmp);
+}
+
 heap_t *heap_crear(cmp_func_t cmp){
     heap_t* heap = malloc(sizeof(heap_t));
     if (!heap) return NULL;
