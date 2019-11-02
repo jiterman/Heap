@@ -24,7 +24,7 @@ void upheap(void** arreglo, size_t pos, cmp_func_t cmp){
 	if (pos == 0) return;
 	size_t padre = (pos-1) / 2;
 	if (cmp(arreglo[padre], arreglo[pos]) < 0){
-		swap(arreglo[pos], arreglo[pos]);
+		swap(&arreglo[padre], &arreglo[pos]);
 		upheap(arreglo, padre, cmp);
     }
 }
@@ -37,7 +37,7 @@ void downheap(void** arreglo, size_t tam, size_t pos, cmp_func_t cmp){
 	if (izq < tam && cmp(arreglo[izq], arreglo[min]) > 0) min = izq;
 	if (der < tam && cmp(arreglo[der], arreglo[min]) > 0) min = der;
 	if (min != pos){
-		swap(arreglo[pos], arreglo[min]);
+		swap(&arreglo[pos], &arreglo[min]);
 		downheap(arreglo, tam, min, cmp);
     }
 }
@@ -46,12 +46,12 @@ heap_t *heap_crear(cmp_func_t cmp){
     heap_t* heap = malloc(sizeof(heap_t));
     if (!heap) return NULL;
 
-    void** datos = malloc(TAM_INICIAL * sizeof(void*));
-    if (!datos){
+    heap->datos = malloc(TAM_INICIAL * sizeof(void*));
+    if (!heap->datos){
         free(heap);
         return NULL;
     }
-
+    
     heap->cant = 0;
     heap->tam = TAM_INICIAL;
     heap->cmp = cmp;
@@ -97,11 +97,10 @@ bool heap_esta_vacio(const heap_t *heap){
 }
 
 bool heap_encolar(heap_t *heap, void *elem){
-    if (!heap) return false;
-    if (heap->cant == heap->tam && !heap_redimensionar(heap, heap->tam++)) return false;
-    heap->cant++;
+    if (heap->cant == heap->tam && !heap_redimensionar(heap, heap->tam*FACTOR_AMP_HEAP)) return false;
     heap->datos[heap->cant] = elem;
-    upheap(heap->datos,heap->cant,heap->cmp); 
+    upheap(heap->datos, heap->cant, heap->cmp); 
+    heap->cant++;
     return true;
 }
 
@@ -114,12 +113,11 @@ void *heap_desencolar(heap_t *heap){
     if (heap_esta_vacio(heap)) return NULL;
     void* valor = heap->datos[0];
 
-    swap(heap->datos[0], heap->datos[heap->cant - 1]);
+    swap(&heap->datos[0], &heap->datos[heap->cant - 1]);
     heap->cant -= 1;
 
     downheap(heap->datos, heap->cant, 0, heap->cmp);
-
-    heap->cant -= 1;
+    // printf("%d\n", *(int*)valor);
     if (heap->cant <= (heap->tam/CRIT_ACHICAR) && heap->tam > TAM_INICIAL) heap_redimensionar(heap, heap->tam/FACTOR_REDUC_HEAP);
 
     return valor;
@@ -131,8 +129,11 @@ void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp){
     heap_t* heap = heap_crear_arr(elementos, cant, cmp);
     size_t i = cant-1;
     while(i != 0){
-        swap(heap->datos[0], heap->datos[i]);
+        elementos[i] = heap_ver_max(heap);
+        swap(&heap->datos[0], &heap->datos[i]);
         i--;
         downheap(heap->datos, i+1, 0, cmp);
     }
+    elementos[i] = heap_ver_max(heap);
+    heap_destruir(heap, NULL);
 }

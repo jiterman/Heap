@@ -28,29 +28,7 @@ void pruebas_heap_vacio() {
 
     /* Destruyo el heap*/
     heap_destruir(heap, NULL);
-    print_test("El heap fue destruido\n", true);
-}
-
-void pruebas_encolar_null(){
-
-    printf("INICIO DE PRUEBAS ENCOLANDO NULL\n");
-
-    /* Declaro las variables a utilizar*/
-    heap_t* heap = heap_crear(comp_nros);
-
-    /* Inicio de pruebas encolando NULL */
-    print_test("Se encola NULL", heap_encolar(heap, NULL));
-
-    /* Chequeo que el heap no se comporte como vacío */
-    print_test("El heap no está vacío", !heap_esta_vacio(heap));
-
-    /*Valido que ver primero y desencolar devuelvan NULL */
-    print_test("Ver primero devuelve elem NULL", heap_ver_max(heap) == NULL);
-    print_test("Desencolar devuelve elem NULL", heap_desencolar(heap) == NULL);
-
-    /* Destruyo el heap*/
-    heap_destruir(heap, NULL);
-    print_test("El heap fue destruido\n", true);
+    print_test("El heap fue destruido", true);
 }
 
 void pruebas_algunos_elementos(){
@@ -60,14 +38,12 @@ void pruebas_algunos_elementos(){
     heap_t* heap = heap_crear(comp_nros);
     int var1 = 5;
     int var2 = -10;
-    bool var3 = false;
-    double var4 = 10.3;
+    int var3 = 0;
 
     /* Inicio de pruebas encolando todos los elementos */
     print_test("Se encola 5", heap_encolar(heap, &var1));
     print_test("Se encola -10", heap_encolar(heap, &var2));
-    print_test("Se encola false", heap_encolar(heap, &var3));
-    print_test("Se encola 10.3", heap_encolar(heap, &var4));
+    print_test("Se encola 0", heap_encolar(heap, &var3));
 
     /* Chequeo que el heap no se comporte como vacío */
     print_test("El heap no está vacío", !heap_esta_vacio(heap));
@@ -75,12 +51,10 @@ void pruebas_algunos_elementos(){
     /*Valido que se mantenga la invariante al desencolar cada elemento */
     print_test("Ver primero es 5", *(int*)heap_ver_max(heap) == 5);
     print_test("Desencolar devuelve 5", *(int*)heap_desencolar(heap) == 5);
+    print_test("Ver primero es 0", *(int*)heap_ver_max(heap) == 0);
+    print_test("Desencolar devuelve 0", *(int*)heap_desencolar(heap) == 0);
     print_test("Ver primero es -10", *(int*)heap_ver_max(heap) == -10);
     print_test("Desencolar devuelve -10", *(int*)heap_desencolar(heap) == -10);
-    print_test("Ver primero es 'hola'", *(bool*)heap_ver_max(heap) == false);
-    print_test("Desencolar devuelve 'hola'", *(bool*)heap_desencolar(heap) == false);
-    print_test("Ver primero es 10.3", *(double*)heap_ver_max(heap) == 10.3);
-    print_test("Desencolar devuelve 10.3", *(double*)heap_desencolar(heap) == 10.3);
 
     /* Chequeo que el heap se comporte como vacío */
     print_test("El heap está vacío", heap_esta_vacio(heap));
@@ -90,14 +64,11 @@ void pruebas_algunos_elementos(){
     /* Destruyo el heap*/
 
     heap_destruir(heap, NULL);
-    print_test("El heap fue destruido\n", true);
+    print_test("El heap fue destruido", true);
 }
 
-void pruebas_de_volumen(){
-    printf("INICIO DE PRUEBAS DE VOLUMEN\n");
-
-    /* Defino la cantidad de elementos que voy a encolar */
-    int cant_elementos = 10000;
+void pruebas_de_volumen(int cant_elementos){
+    printf("\nINICIO DE PRUEBAS DE VOLUMEN\n");
 
     /* Declaro las variables a utilizar*/
     heap_t* heap = heap_crear(comp_nros);
@@ -113,7 +84,7 @@ void pruebas_de_volumen(){
         vector[i] = i;
         // Si algun elemento no se pudo guardar correctamente, ok sera false
         ok &= heap_encolar(heap, &vector[i]);
-        ok2 &= (*(int*)heap_ver_max(heap) == vector[0]);
+        ok2 &= (*(int*)heap_ver_max(heap) == vector[i]);
     }
 
     print_test("Se pudieron encolar todos los elementos", ok);
@@ -123,22 +94,22 @@ void pruebas_de_volumen(){
     chequeando en cada caso la invariante y el primero*/
 
     ok = true;
-    int n = 0;
+    int n = cant_elementos;
 
     while (!heap_esta_vacio(heap)){
         ok &= (*(int*)heap_ver_max(heap) == vector[n]);
         heap_desencolar(heap);
-        n ++;      
+        n--;      
     }
 
     print_test("En cada caso se cumple la invariante y el primero es el correspondiente", ok);
 
     heap_destruir(heap, NULL);
-    print_test("El heap fue destruido\n", true);
+    print_test("El heap fue destruido", true);
 }
 
 void pruebas_destruir_heap(){
-    printf("INICIO DE PRUEBAS DESTRUIR HEAP CON ELEMENTOS EN MEMORIA ESTÁTICA\n");
+    printf("\nINICIO DE PRUEBAS DESTRUIR HEAP CON ELEMENTOS EN MEMORIA ESTÁTICA\n");
 
     /* Declaro las variables a utilizar*/
     heap_t* heap = heap_crear(comp_nros);
@@ -160,12 +131,12 @@ void pruebas_destruir_heap(){
 
     /* Declaro las variables a utilizar*/
     heap = heap_crear(comp_nros);
-    char* a = malloc(sizeof(int));
-    char* b = malloc(sizeof(int));
+    int* a = malloc(sizeof(int)); *a = 10;
+    int* b = malloc(sizeof(int)); *b = 4;
 
     /* Inicio de pruebas encolando todos los elementos */
-    print_test("Se encola variable a", heap_encolar(heap, &a));
-    print_test("Se encola variable b", heap_encolar(heap, &b));
+    print_test("Se encola variable a", heap_encolar(heap, a));
+    print_test("Se encola variable b", heap_encolar(heap, b));
 
     /* Destruyo el heap */
     heap_destruir(heap, free);
@@ -175,14 +146,14 @@ void pruebas_destruir_heap(){
     
     /* Declaro las variables a utilizar*/
     heap = heap_crear(comp_nros);
-    int* c = malloc(sizeof(int));
+    int* c = malloc(sizeof(int)); *c = 0;
 
     /* Inicio de pruebas encolando todos los elementos */
-    print_test("Se encola el puntero a (en memoria dinámica)", heap_encolar(heap, c));
+    print_test("Se encola el puntero c (en memoria dinámica)", heap_encolar(heap, c));
 
     /* Se desencolan los elementos */
     free(heap_desencolar(heap));
-    print_test("Se desencoló y liberó el puntero a", true);
+    print_test("Se desencoló y liberó el puntero c", true);
 
     /* Chequeo que el heap se comporte como vacío */
     print_test("El heap está vacío", heap_esta_vacio(heap));
@@ -193,10 +164,10 @@ void pruebas_destruir_heap(){
 }
 
 void pruebas_crear_arr(){
-    printf("INICIO DE PRUEBAS CREAR HEAP A PARTIR DE ARREGLO\n");
+    printf("\nINICIO DE PRUEBAS CREAR HEAP A PARTIR DE ARREGLO\n");
 
     /* Declaro las variables a utilizar */
-    int n_uno = 9, n_dos = 12, n_tres = 2018, n_pri = 1986, n_seg = 1996, n_ter = 2015, n_prox = 2019;
+    int n_uno = 12, n_dos = 9, n_tres = 2018, n_pri = 1986, n_seg = 1996, n_ter = 2015, n_prox = 2019;
     void *arreglo[7];
     arreglo[0] = &n_uno;
     arreglo[1] = &n_dos;
@@ -213,6 +184,19 @@ void pruebas_crear_arr(){
 
     print_test("El maximo es el esperado", *(int*)heap_ver_max(heap) == 2019);
     print_test("La cantidad coincide", heap_cantidad(heap) == 7);
+
+    print_test("Heap desencolar es 2019", *(int*)heap_desencolar(heap) == 2019);
+    print_test("Heap desencolar es 2018", *(int*)heap_desencolar(heap) == 2018);
+    print_test("Heap desencolar es 2015", *(int*)heap_desencolar(heap) == 2015);
+    print_test("Heap desencolar es 1996", *(int*)heap_desencolar(heap) == 1996);
+    print_test("Heap desencolar es 1986", *(int*)heap_desencolar(heap) == 1986);
+    print_test("Heap desencolar es 12", *(int*)heap_desencolar(heap) == 12);
+
+    print_test("El heap no está vacío", !heap_esta_vacio(heap));
+
+    print_test("Heap desencolar es 9", *(int*)heap_desencolar(heap) == 9);
+
+    print_test("El heap está vacío", heap_esta_vacio(heap));
     
     /* Destruyo el heap */
 
@@ -222,7 +206,7 @@ void pruebas_crear_arr(){
 }
 
 void pruebas_heap_sort(){
-    printf("INICIO DE PRUEBAS ORDENAR ARREGLO CON HEAPSORT\n");
+    printf("\nINICIO DE PRUEBAS ORDENAR ARREGLO CON HEAPSORT\n");
 
     /* Declaro las variables a utilizar*/
     int var = 9, var_uno = 81, var_dos = 102, var_tres = 18, var_cua = 0, var_cin = -3;
@@ -241,7 +225,8 @@ void pruebas_heap_sort(){
 
     /* Reviso que haya ordenado como esperado*/
 
-    for (int i = 0; i<6 && todo_ok; i++){
+    for (int i = 0; i<6; i++){
+        printf("%d %d\n", *(int*)arreglo[i], arreglo_ordenado[i]);
         if (*(int*)arreglo[i] != arreglo_ordenado[i]) todo_ok = false;
     }
     print_test("El arreglo fue ordenado como se esperaba", todo_ok);
@@ -249,9 +234,8 @@ void pruebas_heap_sort(){
 
 void pruebas_heap_alumno() {
     pruebas_heap_vacio();
-    pruebas_encolar_null();
     pruebas_algunos_elementos();
-    pruebas_de_volumen();
+    pruebas_de_volumen(20);
     pruebas_destruir_heap();
     pruebas_crear_arr();
     pruebas_heap_sort();
