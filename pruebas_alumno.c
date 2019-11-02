@@ -188,7 +188,8 @@ void pruebas_destruir_heap(){
     print_test("Se destruyó el heap y sus elementos sin usar una función", true);
 }
 
-void prueba_crear_arr(){
+void pruebas_crear_arr(){
+    printf("INICIO DE PRUEBAS CREAR HEAP A PARTIR DE ARREGLO\n");
 
     /* Declaro las variables a utilizar */
 
@@ -200,12 +201,10 @@ void prueba_crear_arr(){
     
     /* Reviso que se comporte como esperado */
 
-    
-
 }
 
-
-void prueba_heap_sort(){
+void pruebas_heap_sort(){
+    printf("INICIO DE PRUEBAS ORDENAR ARREGLO CON HEAPSORT\n");
 
     /* Declaro las variables a utilizar*/
 
@@ -230,5 +229,6 @@ void pruebas_heap_alumno() {
     pruebas_algunos_elementos();
     pruebas_de_volumen();
     pruebas_destruir_heap();
-    prueba_heap_sort();
+    pruebas_crear_arr();
+    pruebas_heap_sort();
 }

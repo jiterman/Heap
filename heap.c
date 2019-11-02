@@ -133,6 +133,6 @@ void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp){
     while(i != 0){
         swap(heap->datos[0], heap->datos[i]);
         i--;
-        downheap(heap->datos, i, 0, cmp);
+        downheap(heap->datos, i+1, 0, cmp);
     }
 }
