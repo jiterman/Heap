@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #define TAM_INICIAL 10
 #define CRIT_ACHICAR 4
-#define FACTOR_AMPLIACION_PILA 2
-#define FACTOR_REDUCCION_PILA 2
+#define FACTOR_AMP_HEAP 2
+#define FACTOR_REDUC_HEAP 2
 
 struct heap {
 	void** datos;
@@ -52,6 +52,7 @@ heap_t *heap_crear(cmp_func_t cmp){
 
     heap->cant = 0;
     heap->tam = TAM_INICIAL;
+    heap->cmp = cmp;
 
     return heap;
 }
@@ -66,7 +67,17 @@ bool heap_redimensionar(heap_t *heap, size_t nuevo_tam){
     return true;
 }
 
-heap_t *heap_crear_arr(void *arreglo[], size_t n, cmp_func_t cmp);
+heap_t *heap_crear_arr(void *arreglo[], size_t n, cmp_func_t cmp){
+    heap_t* heap = heap_crear(cmp);
+    if (!heap) return NULL;
+
+    for (i = 0; i < n, i++) {
+        if (!heap_encolar(arreglo[i])) {
+            heap_destruir(heap, NULL);
+            return NULL;
+        }
+    }
+}
 
 void heap_destruir(heap_t *heap, void destruir_elemento(void *e)){
     if (destruir_elemento) while (!heap_esta_vacio(heap)) destruir_elemento(heap_desencolar(heap));
@@ -88,7 +99,20 @@ void *heap_ver_max(const heap_t *heap){
     return heap->datos[0];
 }
 
-void *heap_desencolar(heap_t *heap);
+void *heap_desencolar(heap_t *heap){
+    if (heap__esta_vacio(heap)) return NULL;
+    void* valor = heap->datos[0];
+
+    swap(heap->datos[0], heap->datos[heap->cant - 1]);
+    heap->cant -= 1;
+
+    downheap(heap->datos, heap->cant, 0);
+
+    heap->cant -= 1;
+    if (heap->cant <= (heap->tam/CRIT_ACHICAR) && pila->tam > TAM_INICIAL) heap_redimensionar(heap, heap->tam/FACTOR_REDUC_HEAP);
+
+    return valor;
+}
 
 void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp){
     //hago heapify
