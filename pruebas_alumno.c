@@ -194,9 +194,17 @@ void pruebas_destruir_heap(){
 
 void prueba_crear_arr(){
 
-    /* Declaro las variables a utilizar*/
+    /* Declaro las variables a utilizar */
 
-    int arreglo[] = {};
+    int arreglo[] = {9,12,2018,1986,2015,1996,2019};
+
+    /* Creo el heap */
+
+    heap_t* heap = heap_crear_arr(arreglo, 7, comp_nros);
+    
+    /* Reviso que se comporte como esperado */
+
+    
 
 }
 
