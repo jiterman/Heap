@@ -191,6 +191,24 @@ void pruebas_destruir_heap(){
     heap_destruir(heap, NULL);
     print_test("Se destruyó el heap y sus elementos sin usar una función", true);
 }
+void prueba_heap_sort(){
+
+    /* Declaro las variables a utilizar*/
+
+    int arreglo[] = {9,81,102,18,0,-3};
+    int arreglo_ordenado[] = {-3,0,9,18,81,102};
+
+    /* Utilizo heapsort*/
+    heap_sort(arreglo,6,comp_nros);
+
+    /* Reviso que haya ordenado como esperado*/
+
+    bool todo_ok = true;
+    for (int i = 0; i<6 && todo_ok; i++){
+        if (arreglo[i] != arreglo_ordenado[i]) todo_ok = false;
+    }
+    print_test("El arreglo fue ordenado como se esperaba", todo_ok);
+}
 
 void pruebas_heap_alumno() {
     pruebas_heap_vacio();
