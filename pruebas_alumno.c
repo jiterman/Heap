@@ -195,17 +195,23 @@ void pruebas_destruir_heap(){
 void prueba_crear_arr(){
 
     /* Declaro las variables a utilizar */
-
-    int arreglo[] = {9,12,2018,1986,2015,1996,2019};
-
+    int n_uno = 9, n_dos = 12, n_tres = 2018, n_pri = 1986, n_seg = 1996, n_ter = 2015, n_prox = 2019;
+    void *arreglo[7];
+    arreglo[0] = &n_uno;
+    arreglo[1] = &n_dos;
+    arreglo[2] = &n_tres;
+    arreglo[3] = &n_pri;
+    arreglo[4] = &n_seg;
+    arreglo[5] = &n_ter;
+    arreglo[6] = &n_prox;
     /* Creo el heap */
 
     heap_t* heap = heap_crear_arr(arreglo, 7, comp_nros);
     
     /* Reviso que se comporte como esperado */
 
-    print_test("El maximo es el esperado", heap_ver_max(arreglo) == 2019);
-    print_test("La cantidad coincide", heap->cant == 7);
+    print_test("El maximo es el esperado", *(int*)heap_ver_max(heap) == 2019);
+    print_test("La cantidad coincide", heap_cantidad(heap) == 7);
     
     /* Destruyo el heap */
 
@@ -218,8 +224,14 @@ void prueba_crear_arr(){
 void prueba_heap_sort(){
 
     /* Declaro las variables a utilizar*/
-
-    int arreglo[] = {9,81,102,18,0,-3};
+    int var = 9, var_uno = 81, var_dos = 102, var_tres = 18, var_cua = 0, var_cin = -3;
+    void* arreglo[6];
+    arreglo[0] = &var;
+    arreglo[1] = &var_uno;
+    arreglo[2] = &var_dos;
+    arreglo[3] = &var_tres;
+    arreglo[4] = &var_cua;
+    arreglo[5] = &var_cin;
     int arreglo_ordenado[] = {-3,0,9,18,81,102};
     bool todo_ok = true;
 
@@ -229,7 +241,7 @@ void prueba_heap_sort(){
     /* Reviso que haya ordenado como esperado*/
 
     for (int i = 0; i<6 && todo_ok; i++){
-        if (arreglo[i] != arreglo_ordenado[i]) todo_ok = false;
+        if (*(int*)arreglo[i] != arreglo_ordenado[i]) todo_ok = false;
     }
     print_test("El arreglo fue ordenado como se esperaba", todo_ok);
 }
