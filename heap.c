@@ -79,6 +79,8 @@ heap_t *heap_crear_arr(void *arreglo[], size_t n, cmp_func_t cmp){
             return NULL;
         }
     }
+
+    return heap;
 }
 
 void heap_destruir(heap_t *heap, void destruir_elemento(void *e)){
