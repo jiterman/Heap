@@ -3,10 +3,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #define TAM_INICIAL 10
-#define CRIT_AGRANDAR 3
-#define CRIT_ACHICAR 2
-#define FACTOR_CARGA_AMPLIACION 2
-#define FACTOR_CARGA_REDUCCION 4
+#define CRIT_ACHICAR 4
+#define FACTOR_AMPLIACION_PILA 2
+#define FACTOR_REDUCCION_PILA 2
 
 struct heap {
 	void** datos;
@@ -31,8 +30,23 @@ heap_t *heap_crear(cmp_func_t cmp){
     return heap;
 }
 
+bool heap_redimensionar(heap_t *heap, size_t nuevo_tam){
+    void* datos_nuevo = realloc(heap->datos, nuevo_tam * sizeof(void*));
+
+    if (!datos_nuevo) return false;
+
+    heap->datos = datos_nuevo;
+    heap->tam = nuevo_tam;
+    return true;
+}
+
 heap_t *heap_crear_arr(void *arreglo[], size_t n, cmp_func_t cmp);
-void heap_destruir(heap_t *heap, void destruir_elemento(void *e));
+
+void heap_destruir(heap_t *heap, void destruir_elemento(void *e)){
+    if (destruir_elemento) while (!heap_esta_vacio(heap)) destruir_elemento(heap_desencolar(heap));
+    free(heap->datos);
+    free(heap);
+}
 
 size_t heap_cantidad(const heap_t *heap){
     return heap->cant;
