@@ -20,6 +20,7 @@ void swap (void **x, void **y) {
     *y = valor_aux;
 }
 
+
 void upheap(void** arreglo, size_t pos, cmp_func_t cmp){
 	if (pos == 0) return;
 	size_t padre = (pos-1) / 2;
@@ -39,6 +40,14 @@ void downheap(void** arreglo, size_t tam, size_t pos, cmp_func_t cmp){
 	if (min != pos){
 		swap(&arreglo[pos], &arreglo[min]);
 		downheap(arreglo, tam, min, cmp);
+    }
+}
+
+void heapify(void *elementos[], size_t cant, cmp_func_t cmp){
+    size_t i =  cant;
+    while(i !=0){
+        downheap(elementos,cant,i-1,cmp);
+        i--;
     }
 }
 
@@ -125,14 +134,12 @@ void *heap_desencolar(heap_t *heap){
 void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp){
     //hago heapify
     if (cant == 1 || cant == 0) return;
-    heap_t* heap = heap_crear_arr(elementos, cant, cmp);
+    heapify(elementos, cant, cmp);
     size_t i = cant-1;
     while(i != 0){
-        elementos[i] = heap_ver_max(heap);
-        swap(&heap->datos[0], &heap->datos[i]);
+        swap(elementos[0],elementos[i]);
         i--;
-        downheap(heap->datos, i+1, 0, cmp);
+        downheap(elementos, i+1, 0, cmp);
     }
-    elementos[i] = heap_ver_max(heap);
     heap_destruir(heap, NULL);
 }
