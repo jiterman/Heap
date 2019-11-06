@@ -43,10 +43,10 @@ void downheap(void** arreglo, size_t tam, size_t pos, cmp_func_t cmp){
     }
 }
 
-void heapify(void *elementos[], size_t tam, cmp_func_t cmp){
+void heapify(void *arreglo[], size_t tam, cmp_func_t cmp){
     size_t i =  tam;
     while(i){
-        downheap(elementos, tam, i-1, cmp);
+        downheap(arreglo, tam, i-1, cmp);
         i--;
     }
 }
@@ -147,15 +147,13 @@ void *heap_desencolar(heap_t *heap){
 }
 
 void heap_sort(void *elementos[], size_t cant, cmp_func_t cmp){
-    //hago heapify
     if (cant == 1 || cant == 0) return;
     heapify(elementos, cant, cmp);
-    for (int i = 0; i < cant; i++) printf("%d\n", *(int*)elementos[i]);
 
     size_t i = cant-1;
-    while(i != 0){
-        swap(elementos[0],elementos[i]);
+    while(i){
+        swap(&elementos[0], &elementos[i]);
+        downheap(elementos, i, 0, cmp);
         i--;
-        downheap(elementos, i+1, 0, cmp);
     }
 }
